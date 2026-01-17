@@ -1,0 +1,81 @@
+####################################
+# Build directories (CMake)
+####################################
+build/
+build-*/
+cmake-build-*/
+out/
+bin/
+lib/
+
+####################################
+# CMake generated files
+####################################
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+Testing/
+
+####################################
+# Compiler artifacts
+####################################
+*.o
+*.obj
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+####################################
+# Generated dependency files
+####################################
+*.d
+*.gcda
+*.gcno
+*.gcov
+
+####################################
+# IDE / editor noise
+####################################
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+####################################
+# OS-specific junk
+####################################
+Thumbs.db
+
+####################################
+# Logs
+####################################
+*.log
+
+####################################
+# Submodules (IMPORTANT)
+####################################
+# Ignore submodule build output
+vendor/**/build/
+vendor/**/cmake-build-*/
+
+# DO NOT ignore submodule source
+!vendor/**/CMakeLists.txt
+!vendor/**/src/
+!vendor/**/include/
+!vendor/**/.git
+
+####################################
+# Optional: ignore fetched deps
+####################################
+_external/
+_deps/
+

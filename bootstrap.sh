@@ -9,5 +9,5 @@ cmake -S . -B build
 
 echo "Building..."
 # cmake --build build
-mkdir build
+# mkdir build
 bash run.sh

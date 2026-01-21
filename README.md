@@ -9,5 +9,5 @@
 git clone https://github.com/dLakhera/tryraylib.git
 cd tryraylib
 
-./bootstrap.sh
+bash bootstrap.sh
 

@@ -6,7 +6,7 @@
 
 namespace TxtI{
 
-#define MAX_INPUT_CHARS 12
+#define MAX_INPUT_CHARS 4
 
 
 class TextInput{

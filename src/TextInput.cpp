@@ -1,5 +1,11 @@
 #include "headers/TextInput.h"
 
+#if not (defined(HEIGHT) || defined(WIDTH))
+#define HEIGTH 1000
+#define WIDTH 1000
+#endif // !DEBUG
+
+
 bool TxtI::TextInput::checkMouseOnText(Vector2 vec, Rectangle rec){
 
 	return CheckCollisionPointRec(vec, rec);
@@ -48,7 +54,7 @@ void TxtI::TextInput::update(){
                 }
 
                 key = GetCharPressed();  // Check next character in the queue
-				this->checkInp();
+				        this->checkInp();
             }
 
             if (IsKeyPressed(KEY_BACKSPACE))
@@ -88,41 +94,55 @@ void TxtI::TextInput::draw(){
 }
 
 void TxtI::TextInput::checkInp(){
-	
-	int commCounter=0,o = 0;
-	int i = 0;
-	for(i=0; this->name[i]!='\0';i++) commCounter+=(this->name[i] == ',');
-	int arr[3] = {0};
+  
+  int radius = std::stoi(this->name);
+  
+  this->x = HEIGTH/2;
+  this->y = WIDTH/2;
+  this->r = radius/2;
 
+  std::cout << "Radius of the cirlce: " << this->r << std::endl;
 
-	if (commCounter == 2 && this->name[i-1]!=','){
-	
-		char ch[4];
-	
-
-		for(int i =0, j=0,k=0; this->name[i]!='\0'; i++){
-		
-			if (this->name[i]!=','){
-				ch[j++] = this->name[i];
-				// ctr+=1;
-			} else{
-				ch[j] = '\0';
-				j = 0;
-
-				std::cout <<  std::stoi(ch) << std::endl;
-				arr[k++] = std::stoi(ch);
-			}
-		}
-
-		arr[2] = std::stoi(ch);
-
-		for(int i=0;i<3;i++) std::cout << arr[i] << " ";
-		std::cout << std::endl;
-
-		this->x=arr[0], this->y=arr[1], this->r = arr[2];	
-		this->isUpdated = true;
-
-	} 
+  this->isUpdated = true;
 
 }
 
+// void TxtI::TextInput::checkInp(){
+//
+// 	int commCounter=0,o = 0;
+// 	int i = 0;
+// 	for(i=0; this->name[i]!='\0';i++) commCounter+=(this->name[i] == ',');
+// 	int arr[3] = {0};
+//
+//
+// 	if (commCounter == 2 && this->name[i-1]!=','){
+//
+// 		char ch[4];
+//
+//
+// 		for(int i =0, j=0,k=0; this->name[i]!='\0'; i++){
+//
+// 			if (this->name[i]!=','){
+// 				ch[j++] = this->name[i];
+// 				// ctr+=1;
+// 			} else{
+// 				ch[j] = '\0';
+// 				j = 0;
+//
+// 				std::cout <<  std::stoi(ch) << std::endl;
+// 				arr[k++] = std::stoi(ch);
+// 			}
+// 		}
+//
+// 		arr[2] = std::stoi(ch);
+//
+// 		for(int i=0;i<3;i++) std::cout << arr[i] << " ";
+// 		std::cout << std::endl;
+//
+// 		this->x=arr[0], this->y=arr[1], this->r = arr[2];	
+// 		this->isUpdated = true;
+//
+// 	} 
+//
+// }
+//

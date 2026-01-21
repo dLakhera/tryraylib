@@ -6,7 +6,7 @@
 #include <cmath>
 #include <raymath.h>
 
-#define RAY_COUNT 500
+#define RAY_COUNT 1000
 #define RAY_LENGTH 1000
 
 struct obj{

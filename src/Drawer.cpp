@@ -62,18 +62,30 @@ void Drawer::update(){
 	
 		Vector2 objCenter = {Obj.x, Obj.y};
 		Vector2 light = {center_x, center_y};
-		Vector2 dist = DistancePointToLine2D(objCenter, light, rayEnd);
-		float closestDistance = distance(dist, objCenter);
-		
-		if (closestDistance < Obj.r) {
-			rayEnd = dist;
-			float toMove = pow(pow(Obj.r,2) - pow(closestDistance,2), 0.5);
-			std::cout << ctr << ": " << toMove << std::endl;	
-			Vector2 lVec = Vector2Negate( Vector2Subtract(rayEnd, light)/Vector2LengthSqr(Vector2Subtract(light, rayEnd)));
-			rayEnd = Vector2Negate(Vector2Add(Vector2Subtract(rayEnd, light), Vector2Scale(lVec, toMove)));
+		Vector2 ray = Vector2Subtract(rayEnd, light);	
+		Vector2 rayDir = Vector2Normalize(ray); 
+
+		Vector2 L = Vector2Subtract(objCenter, light);
+
+		float tca = Vector2DotProduct(L, rayDir);
+
+		if (tca < 0.0f) {
+			rays[i] = rayEnd;
+			continue;
+		}
+
+		float closestDistance = Vector2DotProduct(L,L) - tca*tca;
+
+		if (closestDistance < Obj.r*Obj.r) {
+			
+			std::cout << "Entered Intersection logic!" << std::endl;
+
+			float toMove = sqrtf(Obj.r*Obj.r - closestDistance);
+			float firstIntersection = tca - toMove;
+			
+			rayEnd = Vector2Add(light, Vector2Scale(rayDir, firstIntersection));
 
 			ctr++;
-
 		}
 		
 		rays[i] = rayEnd;

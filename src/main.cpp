@@ -19,7 +19,8 @@ int main(){
 	// InitWindow(screenWidth, screenHeight, "My RayLib App!");
 	InitWindow(WIDTH, HEIGHT, "My RayLib App!");
 
-	Drawer drw = Drawer(WIDTH/2, HEIGHT/2, 25);
+	// Drawer drw = Drawer(screenWidth, screenHeight, 25);
+	Drawer drw = Drawer(WIDTH/2,HEIGHT/2, 25);
 
 	SetTargetFPS(120);
 	// WaitTime(2);

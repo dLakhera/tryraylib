@@ -54,6 +54,7 @@ void Drawer::update(){
 	}
 
 	int ctr = 0;
+
 	for(int i = 0; i < RAY_COUNT; i++) {
 
 		float angle = (float)((float)i/RAY_COUNT) * 360 * DEG2RAD;
@@ -62,36 +63,54 @@ void Drawer::update(){
 	
 		Vector2 objCenter = {Obj.x, Obj.y};
 		Vector2 light = {center_x, center_y};
+
+		// light souce inside the circle object
+		if (distance(objCenter, light) < Obj.r){
+			rays[i] = std::make_pair(light, light);
+			continue;
+		}
+
 		Vector2 ray = Vector2Subtract(rayEnd, light);	
 		Vector2 rayDir = Vector2Normalize(ray); 
 
 		Vector2 L = Vector2Subtract(objCenter, light);
 
 		float tca = Vector2DotProduct(L, rayDir);
-
+		
+		// Greater than 90 deg angle between ray and (lightsource, objcenter) vector, meaning it is going away from the object from the start 
 		if (tca < 0.0f) {
-			rays[i] = rayEnd;
+			rays[i] = std::make_pair(rayEnd, rayEnd);
 			continue;
 		}
 
 		float closestDistance = Vector2DotProduct(L,L) - tca*tca;
 
-		if (closestDistance < Obj.r*Obj.r) {
-			
-			std::cout << "Entered Intersection logic!" << std::endl;
+		// float lToRayEnd = Vector2Length(Vector2Subtract(light, rayEnd));
+		// float lToPerp = Vector2Length(Vector2Subtract(light, Vector2Scale(rayDir, tca)));
 
+		if (closestDistance < Obj.r*Obj.r) { // && lToRayEnd >= lToPerp) {
+			
 			float toMove = sqrtf(Obj.r*Obj.r - closestDistance);
 			float firstIntersection = tca - toMove;
-			
-			rayEnd = Vector2Add(light, Vector2Scale(rayDir, firstIntersection));
+			float secondIntersection = tca + toMove;
 
+			Vector2 firstRayIntersect = Vector2Add(light, Vector2Scale(rayDir, firstIntersection));
+			Vector2 secRayIntersect = Vector2Add(light, Vector2Scale(rayDir, secondIntersection)); 
+			// if (distance(light, rayEnd) > distance(light, secRayIntersect)){
+			// 	rays[i] = std::make_pair(firstRayIntersect, secRayIntersect);
+			// } else {
+			// 	rays[i] = std::make_pair(firstRayIntersect, firstRayIntersect);
+			// }
+			
+			rays[i] = std::make_pair(firstRayIntersect, secRayIntersect);
+
+			// rayEnd = firstRayIntersect;	
 			ctr++;
 		}
-		
-		rays[i] = rayEnd;
+		else	
+			rays[i] = std::make_pair(rayEnd, rayEnd);
+
 	}
-
-
 
 };
 
@@ -100,12 +119,26 @@ void Drawer::draw(){
 	DrawText("Enter the radius of the circle ball:", 50, 50, 20, BLACK);	
 	DrawCircle(this->center_x, this->center_y, this->radius, RED);
 	// std::cout<<Obj.x << " " << Obj.y << " " << Obj.r << std::endl;
-	DrawCircle(Obj.x, Obj.y, Obj.r, BLACK);
+	DrawCircle(Obj.x, Obj.y, Obj.r,DARKBLUE);
 
+	Vector2 objCenter = {Obj.x, Obj.y};
 	Vector2 light = {center_x, center_y};
 
+	Vector2 L = Vector2Subtract(objCenter, light);
+
 	for(int i=0;i<RAY_COUNT;i++) {
-		DrawLineV(light, rays[i], YELLOW);
+		// DrawLineV(light, rays[i].first, YELLOW);
+		if (rays[i].first == rays[i].second){
+			DrawLineV(light, rays[i].first, YELLOW);
+		} else{
+
+			DrawLineV(light, rays[i].first, YELLOW);
+			Vector2 rayDir = {cosf((float)i/RAY_COUNT*360*DEG2RAD), sinf((float)i/RAY_COUNT*360*DEG2RAD)};	
+			float len = Vector2Length(Vector2Subtract(Vector2Scale(rayDir, RAY_LENGTH), rays[i].second));
+			DrawLineV(rays[i].second, Vector2Add(rays[i].second, Vector2Scale(rayDir, len)), BLACK);
+
+		}
+
 	}
 
 	this->input1.draw();
